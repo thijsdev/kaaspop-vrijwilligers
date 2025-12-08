@@ -288,7 +288,9 @@ function sendConfirmationEmail(data) {
     to: data.email,
     subject: subject,
     htmlBody: htmlBody,
-    name: CONFIG.emailVanNaam
+    name: CONFIG.emailVanNaam,
+    from: 'vrijwilligers@kaaspop.nl',
+    replyTo: 'vrijwilligers@kaaspop.nl'
   });
 }
 
@@ -331,7 +333,9 @@ function sendNotificationEmail(data) {
     to: CONFIG.organisatieEmail,
     subject: subject,
     htmlBody: htmlBody,
-    name: CONFIG.emailVanNaam
+    name: CONFIG.emailVanNaam,
+    from: 'vrijwilligers@kaaspop.nl',
+    replyTo: 'vrijwilligers@kaaspop.nl'
   });
 }
 
