@@ -20,7 +20,7 @@ echo ""
 TEST_DATA='{
   "voornaam": "Test",
   "achternaam": "CLI Gebruiker",
-  "email": "test-cli@example.com",
+  "email": "thijs@serverless.nl",
   "telefoon": "0612345678",
   "dieetwensen": ["Vegetarisch", "Glutenvrij"],
   "vrijwilligerswerk": "Kaasmarkt: 13:30-18:00",

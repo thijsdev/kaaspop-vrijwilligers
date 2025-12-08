@@ -290,7 +290,8 @@ function sendConfirmationEmail(data) {
     htmlBody: htmlBody,
     name: CONFIG.emailVanNaam,
     from: 'vrijwilligers@kaaspop.nl',
-    replyTo: 'vrijwilligers@kaaspop.nl'
+    replyTo: 'vrijwilligers@kaaspop.nl',
+    noReply: true
   });
 }
 
