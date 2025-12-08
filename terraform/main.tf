@@ -35,7 +35,7 @@ variable "domain_name" {
 variable "hosted_zone_name" {
   description = "Route53 hosted zone naam"
   type        = string
-  default     = "kaaspop.nl"
+  default     = "vrijwilligers.kaaspop.nl."
 }
 
 # Data source voor bestaande hosted zone

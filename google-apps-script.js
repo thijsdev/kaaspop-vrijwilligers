@@ -3,8 +3,8 @@
 
 // CONFIGURATIE - PAS DIT AAN
 const CONFIG = {
-  organisatieEmail: 'organisatie@kaaspop.nl', // Vervang met jouw email
-  sheetName: 'Aanmeldingen',
+  organisatieEmail: 'vrijwilligers@kaaspop.nl', // Vervang met jouw email
+  sheetName: 'Aanmeldingen 2025',
   emailVanNaam: 'Kaaspop Vrijwilligers',
   emailOnderwerp: 'Bevestiging aanmelding Kaaspop vrijwilliger'
 };
@@ -63,18 +63,22 @@ function saveToSheet(data) {
   }
   
   // Voeg data toe
+  const row = sheet.getLastRow() + 1;
   sheet.appendRow([
     new Date(),
     data.voornaam,
     data.achternaam,
     data.email,
-    data.telefoon,
+    "'" + data.telefoon, // Apostrof voorkomt dat voorloopnul verdwijnt
     data.dieetwensen.join(', '),
     data.vrijwilligerswerk,
     data.samenMetBuddy ? 'Ja' : 'Nee',
     data.buddyNaam || '-',
     data.opAfbouw.join(', ')
   ]);
+  
+  // Formatteer telefoon kolom als tekst
+  sheet.getRange(row, 5).setNumberFormat('@');
 }
 
 // Verstuur bevestigingsmail naar deelnemer

@@ -636,12 +636,12 @@
 
         const timeslots = {
             bar: [
-                { value: 'Kaasmarkt: 13:30-18:00', label: 'Kaasmarkt: 13.30 - 18.00u', location: 'Kaasmarkt' },
-                { value: 'Kaasmarkt: 18:00-22:30', label: 'Kaasmarkt: 18.00 - 22.30u', location: 'Kaasmarkt' },
-                { value: 'Beestenmarkt: 13:00-17:00', label: 'Beestenmarkt: 13.00 - 17.00u', location: 'Beestenmarkt' },
-                { value: 'Beestenmarkt: 17:00-21:00', label: 'Beestenmarkt: 17.00 - 21.00u', location: 'Beestenmarkt' },
-                { value: 'Speeltoren: 13:00-16:00', label: 'Speeltoren: 13.00 - 16.00u', location: 'Speeltoren' },
-                { value: 'Speeltoren: 16:00-19:00', label: 'Speeltoren: 16.00 - 19.00u', location: 'Speeltoren' }
+                { value: 'Kaasmarkt: 13:30-18:00', label: 'Kaasmarkt: 13.30 - 18.00u' },
+                { value: 'Kaasmarkt: 18:00-22:30', label: 'Kaasmarkt: 18.00 - 22.30u' },
+                { value: 'Beestenmarkt: 13:00-17:00', label: 'Beestenmarkt: 13.00 - 17.00u' },
+                { value: 'Beestenmarkt: 17:00-21:00', label: 'Beestenmarkt: 17.00 - 21.00u' },
+                { value: 'Speeltoren: 13:00-16:00', label: 'Speeltoren: 13.00 - 16.00u' },
+                { value: 'Speeltoren: 16:00-19:00', label: 'Speeltoren: 16.00 - 19.00u' }
             ],
             kinderhoek: [
                 { value: 'In de kinderhoek: 13:00-17:00', label: '13.00 - 17.00u' }
@@ -893,9 +893,7 @@
             // Validate op/afbouw (at least one checkbox must be checked)
             const opafbouwCheckboxes = document.querySelectorAll('input[name="opafbouw"]');
             const isAnyOpafbouwChecked = Array.from(opafbouwCheckboxes).some(cb => cb.checked);
-            console.log('Opafbouw checkboxes:', opafbouwCheckboxes.length, 'Checked:', isAnyOpafbouwChecked);
             if (!isAnyOpafbouwChecked) {
-                console.log('Showing opafbouw error');
                 document.getElementById('opafbouw-error').style.display = 'block';
                 return;
             }
@@ -918,7 +916,7 @@
                     .map(cb => cb.value)
             };
 
-            // Verstuur naar Google Apps Script
+            // Verstuur naar Google Sheets
             submitToGoogleSheets(formData);
         });
 
@@ -929,9 +927,7 @@
 
         // Verstuur data naar Google Sheets
         function submitToGoogleSheets(formData) {
-            // VERVANG DEZE URL MET JOUW GOOGLE APPS SCRIPT WEB APP URL
-            const scriptURL = 'VERVANG_MET_JOUW_GOOGLE_APPS_SCRIPT_URL';
-            
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbwa6fZJK0igAsJ2y33jyEYXBgtAn5nyFrGQ20ZVPK_NvQPURLzzWRRT8s4RAMa85Oom/exec';
             // Toon loading indicator
             const submitButton = document.querySelector('button[type="submit"]');
             const originalText = submitButton.textContent;
