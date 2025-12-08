@@ -636,9 +636,12 @@
 
         const timeslots = {
             bar: [
-                { value: 'Achter de bar: 13:00-16:00', label: '13.00 - 16.00u' },
-                { value: 'Achter de bar: 16:00-19:00', label: '16.00 - 19.00u' },
-                { value: 'Achter de bar: 19:00-22:00', label: '19.00 - 22.00u' }
+                { value: 'Kaasmarkt: 13:30-18:00', label: 'Kaasmarkt: 13.30 - 18.00u', location: 'Kaasmarkt' },
+                { value: 'Kaasmarkt: 18:00-22:30', label: 'Kaasmarkt: 18.00 - 22.30u', location: 'Kaasmarkt' },
+                { value: 'Beestenmarkt: 13:00-17:00', label: 'Beestenmarkt: 13.00 - 17.00u', location: 'Beestenmarkt' },
+                { value: 'Beestenmarkt: 17:00-21:00', label: 'Beestenmarkt: 17.00 - 21.00u', location: 'Beestenmarkt' },
+                { value: 'Speeltoren: 13:00-16:00', label: 'Speeltoren: 13.00 - 16.00u', location: 'Speeltoren' },
+                { value: 'Speeltoren: 16:00-19:00', label: 'Speeltoren: 16.00 - 19.00u', location: 'Speeltoren' }
             ],
             kinderhoek: [
                 { value: 'In de kinderhoek: 13:00-17:00', label: '13.00 - 17.00u' }
@@ -915,20 +918,56 @@
                     .map(cb => cb.value)
             };
 
-            console.log('Formulier verzonden:', formData);
-            alert('Formulier succesvol verzonden!\n\nGegevens:\n' + JSON.stringify(formData, null, 2));
-            
-            form.reset();
-            currentStep = 1;
-            showStep(1);
-            updateProgress();
-            selectedLocation = '';
-            selectedTimeslot = '';
+            // Verstuur naar Google Apps Script
+            submitToGoogleSheets(formData);
         });
 
         function showError(fieldId) {
             document.getElementById(fieldId).style.borderColor = '#FF6B35';
             document.getElementById(fieldId + '-error').style.display = 'block';
+        }
+
+        // Verstuur data naar Google Sheets
+        function submitToGoogleSheets(formData) {
+            // VERVANG DEZE URL MET JOUW GOOGLE APPS SCRIPT WEB APP URL
+            const scriptURL = 'VERVANG_MET_JOUW_GOOGLE_APPS_SCRIPT_URL';
+            
+            // Toon loading indicator
+            const submitButton = document.querySelector('button[type="submit"]');
+            const originalText = submitButton.textContent;
+            submitButton.textContent = 'Verzenden...';
+            submitButton.disabled = true;
+            
+            fetch(scriptURL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(() => {
+                // Success
+                alert('✅ Aanmelding succesvol verzonden!\n\nJe ontvangt een bevestigingsmail op ' + formData.email);
+                
+                // Reset form
+                form.reset();
+                currentStep = 1;
+                showStep(1);
+                updateProgress();
+                selectedLocation = '';
+                selectedTimeslot = '';
+                
+                submitButton.textContent = originalText;
+                submitButton.disabled = false;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('❌ Er ging iets mis bij het verzenden. Probeer het opnieuw of neem contact op met de organisatie.');
+                
+                submitButton.textContent = originalText;
+                submitButton.disabled = false;
+            });
         }
 
         // Initialize
