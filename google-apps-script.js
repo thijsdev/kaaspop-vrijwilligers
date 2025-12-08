@@ -64,12 +64,16 @@ function saveToSheet(data) {
   
   // Voeg data toe
   const row = sheet.getLastRow() + 1;
+  
+  // Zorg dat telefoon als tekst wordt opgeslagen
+  const telefoonValue = String(data.telefoon);
+  
   sheet.appendRow([
     new Date(),
     data.voornaam,
     data.achternaam,
     data.email,
-    "'" + data.telefoon, // Apostrof voorkomt dat voorloopnul verdwijnt
+    telefoonValue,
     data.dieetwensen.join(', '),
     data.vrijwilligerswerk,
     data.samenMetBuddy ? 'Ja' : 'Nee',
@@ -77,8 +81,10 @@ function saveToSheet(data) {
     data.opAfbouw.join(', ')
   ]);
   
-  // Formatteer telefoon kolom als tekst
-  sheet.getRange(row, 5).setNumberFormat('@');
+  // Formatteer telefoon kolom expliciet als tekst (plain text format)
+  const telefoonCell = sheet.getRange(row, 5);
+  telefoonCell.setNumberFormat('@STRING@');
+  telefoonCell.setValue(telefoonValue);
 }
 
 // Verstuur bevestigingsmail naar deelnemer
