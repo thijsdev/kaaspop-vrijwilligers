@@ -87,6 +87,13 @@ aws s3 cp index.html s3://${BUCKET_NAME}/index.html \
     --content-type "text/html" \
     --cache-control "max-age=3600"
 
+# Upload favicon
+if [ -f "favicon.svg" ]; then
+    aws s3 cp favicon.svg s3://${BUCKET_NAME}/favicon.svg \
+        --content-type "image/svg+xml" \
+        --cache-control "max-age=86400"
+fi
+
 echo -e "${GREEN}✅ Formulier geüpload${NC}"
 echo ""
 

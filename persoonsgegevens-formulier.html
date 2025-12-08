@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Persoonsgegevens - Kaaspop Stijl</title>
+    <title>Vrijwilligers Aanmelding - Kaaspop</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -726,7 +727,7 @@
             }
         }
 
-        function loadTimeslots() {
+        async function loadTimeslots() {
             const container = document.getElementById('timeslot-options');
             const label = document.getElementById('timeslot-label');
             container.innerHTML = '';
@@ -745,17 +746,64 @@
                 andersInput.style.display = 'none';
             }
 
+            // Haal beschikbaarheid op voor bardiensten
+            let availability = {};
+            if (selectedLocation === 'bar') {
+                try {
+                    const scriptURL = 'https://script.google.com/macros/s/AKfycbwa6fZJK0igAsJ2y33jyEYXBgtAn5nyFrGQ20ZVPK_NvQPURLzzWRRT8s4RAMa85Oom/exec';
+                    const response = await fetch(scriptURL, {
+                        method: 'POST',
+                        redirect: 'follow',
+                        headers: {
+                            'Content-Type': 'text/plain',
+                        },
+                        body: JSON.stringify({ action: 'getAvailability' })
+                    });
+                    const result = await response.json();
+                    if (result.success) {
+                        availability = result.availability;
+                    }
+                } catch (error) {
+                    console.error('Could not fetch availability:', error);
+                }
+            }
+
             const slots = timeslots[selectedLocation] || [];
             slots.forEach(slot => {
                 const card = document.createElement('div');
                 card.className = 'location-card';
                 card.dataset.timeslot = slot.value;
-                card.innerHTML = `<h3>🕐 ${slot.label}</h3>`;
-                card.addEventListener('click', function() {
-                    document.querySelectorAll('#timeslot-options .location-card').forEach(c => c.classList.remove('selected'));
-                    this.classList.add('selected');
-                    selectedTimeslot = this.dataset.timeslot;
-                });
+                
+                // Check beschikbaarheid
+                let availabilityText = '';
+                let isDisabled = false;
+                
+                if (selectedLocation === 'bar' && availability[slot.value]) {
+                    const avail = availability[slot.value];
+                    if (avail.remaining > 0) {
+                        availabilityText = `<p style="color: #4ec9b0; font-weight: 600; margin-top: 5px;">Nog ${avail.remaining} ${avail.remaining === 1 ? 'plek' : 'plekken'} beschikbaar</p>`;
+                    } else {
+                        availabilityText = `<p style="color: #f48771; font-weight: 600; margin-top: 5px;">VOL (${avail.current}/${avail.max})</p>`;
+                        isDisabled = true;
+                        card.style.opacity = '0.5';
+                        card.style.cursor = 'not-allowed';
+                    }
+                }
+                
+                card.innerHTML = `<h3>🕐 ${slot.label}</h3>${availabilityText}`;
+                
+                if (!isDisabled) {
+                    card.addEventListener('click', function() {
+                        document.querySelectorAll('#timeslot-options .location-card').forEach(c => c.classList.remove('selected'));
+                        this.classList.add('selected');
+                        selectedTimeslot = this.dataset.timeslot;
+                    });
+                } else {
+                    card.addEventListener('click', function() {
+                        alert('⚠️ Dit tijdslot is helaas vol. Kies een ander tijdslot.');
+                    });
+                }
+                
                 container.appendChild(card);
             });
         }
@@ -926,44 +974,47 @@
         }
 
         // Verstuur data naar Google Sheets
-        function submitToGoogleSheets(formData) {
+        async function submitToGoogleSheets(formData) {
             const scriptURL = 'https://script.google.com/macros/s/AKfycbwa6fZJK0igAsJ2y33jyEYXBgtAn5nyFrGQ20ZVPK_NvQPURLzzWRRT8s4RAMa85Oom/exec';
-            // Toon loading indicator
+            
             const submitButton = document.querySelector('button[type="submit"]');
             const originalText = submitButton.textContent;
             submitButton.textContent = 'Verzenden...';
             submitButton.disabled = true;
             
-            fetch(scriptURL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData)
-            })
-            .then(() => {
-                // Success
-                alert('✅ Aanmelding succesvol verzonden!\n\nJe ontvangt een bevestigingsmail op ' + formData.email);
+            try {
+                // Probeer met redirect follow om response te kunnen lezen
+                const response = await fetch(scriptURL, {
+                    method: 'POST',
+                    redirect: 'follow',
+                    headers: {
+                        'Content-Type': 'text/plain',
+                    },
+                    body: JSON.stringify(formData)
+                });
                 
-                // Reset form
-                form.reset();
-                currentStep = 1;
-                showStep(1);
-                updateProgress();
-                selectedLocation = '';
-                selectedTimeslot = '';
+                const result = await response.json();
                 
-                submitButton.textContent = originalText;
-                submitButton.disabled = false;
-            })
-            .catch(error => {
+                if (result.success) {
+                    alert('✅ Aanmelding succesvol verzonden!\n\nJe ontvangt een bevestigingsmail op ' + formData.email);
+                    
+                    form.reset();
+                    currentStep = 1;
+                    showStep(1);
+                    updateProgress();
+                    selectedLocation = '';
+                    selectedTimeslot = '';
+                } else {
+                    alert('❌ ' + result.message);
+                }
+                
+            } catch (error) {
                 console.error('Error:', error);
                 alert('❌ Er ging iets mis bij het verzenden. Probeer het opnieuw of neem contact op met de organisatie.');
-                
-                submitButton.textContent = originalText;
-                submitButton.disabled = false;
-            });
+            }
+            
+            submitButton.textContent = originalText;
+            submitButton.disabled = false;
         }
 
         // Initialize

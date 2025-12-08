@@ -14,6 +14,25 @@ function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
     
+    // Check of dit een availability request is
+    if (data.action === 'getAvailability') {
+      const availability = getAllAvailability();
+      return ContentService
+        .createTextOutput(JSON.stringify({ success: true, availability: availability }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+    
+    // Check of er nog plek is voor dit tijdslot
+    const availabilityCheck = checkAvailability(data.vrijwilligerswerk);
+    if (!availabilityCheck.available) {
+      return ContentService
+        .createTextOutput(JSON.stringify({ 
+          success: false, 
+          message: availabilityCheck.message 
+        }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+    
     // Sla data op in Google Sheets
     saveToSheet(data);
     
@@ -33,6 +52,110 @@ function doPost(e) {
       .createTextOutput(JSON.stringify({ success: false, message: 'Er ging iets mis: ' + error.toString() }))
       .setMimeType(ContentService.MimeType.JSON);
   }
+}
+
+// Check of er nog plek is voor een tijdslot
+function checkAvailability(vrijwilligerswerk) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  
+  // Haal aantallen op uit "Aantallen vrijwilligers" sheet
+  const aantallenSheet = ss.getSheetByName('Aantallen vrijwilligers');
+  if (!aantallenSheet) {
+    // Als sheet niet bestaat, sta alles toe
+    return { available: true };
+  }
+  
+  // Lees alle data (skip header row)
+  const data = aantallenSheet.getRange(2, 1, aantallenSheet.getLastRow() - 1, 2).getValues();
+  
+  // Zoek het maximum aantal voor dit tijdslot
+  let maxAantal = null;
+  for (let i = 0; i < data.length; i++) {
+    const [plek, aantal] = data[i];
+    if (plek && vrijwilligerswerk.includes(plek)) {
+      maxAantal = parseInt(aantal);
+      break;
+    }
+  }
+  
+  // Als geen limiet gevonden, sta toe
+  if (maxAantal === null || isNaN(maxAantal)) {
+    return { available: true };
+  }
+  
+  // Tel huidige aanmeldingen voor dit tijdslot
+  const aanmeldingenSheet = ss.getSheetByName(CONFIG.sheetName);
+  if (!aanmeldingenSheet || aanmeldingenSheet.getLastRow() <= 1) {
+    // Geen aanmeldingen nog, dus beschikbaar
+    return { available: true };
+  }
+  
+  // Tel aanmeldingen (kolom 7 = Vrijwilligerswerk)
+  const aanmeldingen = aanmeldingenSheet.getRange(2, 7, aanmeldingenSheet.getLastRow() - 1, 1).getValues();
+  let huidigAantal = 0;
+  
+  for (let i = 0; i < aanmeldingen.length; i++) {
+    if (aanmeldingen[i][0] === vrijwilligerswerk) {
+      huidigAantal++;
+    }
+  }
+  
+  // Check of er nog plek is
+  if (huidigAantal >= maxAantal) {
+    return {
+      available: false,
+      message: `Dit tijdslot is helaas vol (${maxAantal}/${maxAantal} plekken bezet). Kies een ander tijdslot.`
+    };
+  }
+  
+  return {
+    available: true,
+    remaining: maxAantal - huidigAantal
+  };
+}
+
+// Haal alle beschikbaarheden op
+function getAllAvailability() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const aantallenSheet = ss.getSheetByName('Aantallen vrijwilligers');
+  
+  if (!aantallenSheet) {
+    return {};
+  }
+  
+  // Lees alle data (skip header row)
+  const data = aantallenSheet.getRange(2, 1, aantallenSheet.getLastRow() - 1, 2).getValues();
+  const aanmeldingenSheet = ss.getSheetByName(CONFIG.sheetName);
+  
+  const availability = {};
+  
+  for (let i = 0; i < data.length; i++) {
+    const [plek, maxAantal] = data[i];
+    if (!plek) continue;
+    
+    const max = parseInt(maxAantal);
+    if (isNaN(max)) continue;
+    
+    // Tel huidige aanmeldingen
+    let huidigAantal = 0;
+    if (aanmeldingenSheet && aanmeldingenSheet.getLastRow() > 1) {
+      const aanmeldingen = aanmeldingenSheet.getRange(2, 7, aanmeldingenSheet.getLastRow() - 1, 1).getValues();
+      for (let j = 0; j < aanmeldingen.length; j++) {
+        if (aanmeldingen[j][0] && aanmeldingen[j][0].includes(plek)) {
+          huidigAantal++;
+        }
+      }
+    }
+    
+    availability[plek] = {
+      max: max,
+      current: huidigAantal,
+      remaining: max - huidigAantal,
+      available: huidigAantal < max
+    };
+  }
+  
+  return availability;
 }
 
 // Sla data op in Google Sheets
