@@ -356,6 +356,57 @@
             margin: 0;
         }
 
+        /* Loading animation */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(253, 185, 19, 0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            flex-direction: column;
+        }
+
+        .loading-overlay.show {
+            display: flex;
+        }
+
+        .cheese-loader {
+            font-size: 80px;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        .loading-text {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .loading-subtext {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+
         /* Mobile optimizations */
         @media (max-width: 768px) {
             body {
@@ -426,6 +477,13 @@
     </style>
 </head>
 <body>
+    <!-- Loading overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="cheese-loader">🧀</div>
+        <div class="loading-text">Beschikbaarheid ophalen...</div>
+        <div class="loading-subtext">Even geduld, we checken de vrije plekken</div>
+    </div>
+
     <div class="container">
         <h1>Persoonsgegevens</h1>
         <p class="subtitle">Vul alle velden in om je aan te melden</p>
@@ -598,6 +656,9 @@
         let currentStep = 1;
         let selectedLocation = '';
         let selectedTimeslot = '';
+        let cachedAvailability = null;
+        let cacheTimestamp = null;
+        const CACHE_DURATION = 30000; // 30 seconden cache
 
         // Show/hide buddy name input
         document.querySelectorAll('input[name="buddy"]').forEach(radio => {
@@ -730,6 +791,7 @@
         async function loadTimeslots() {
             const container = document.getElementById('timeslot-options');
             const label = document.getElementById('timeslot-label');
+            const loadingOverlay = document.getElementById('loadingOverlay');
             container.innerHTML = '';
 
             // Update the main title when loading timeslots
@@ -749,22 +811,38 @@
             // Haal beschikbaarheid op voor bardiensten
             let availability = {};
             if (selectedLocation === 'bar') {
-                try {
-                    const scriptURL = 'https://script.google.com/macros/s/AKfycbwa6fZJK0igAsJ2y33jyEYXBgtAn5nyFrGQ20ZVPK_NvQPURLzzWRRT8s4RAMa85Oom/exec';
-                    const response = await fetch(scriptURL, {
-                        method: 'POST',
-                        redirect: 'follow',
-                        headers: {
-                            'Content-Type': 'text/plain',
-                        },
-                        body: JSON.stringify({ action: 'getAvailability' })
-                    });
-                    const result = await response.json();
-                    if (result.success) {
-                        availability = result.availability;
+                // Check cache eerst
+                const now = Date.now();
+                if (cachedAvailability && cacheTimestamp && (now - cacheTimestamp < CACHE_DURATION)) {
+                    availability = cachedAvailability;
+                    console.log('Using cached availability');
+                } else {
+                    // Toon loading animatie
+                    loadingOverlay.classList.add('show');
+                    
+                    try {
+                        const scriptURL = 'https://script.google.com/macros/s/AKfycbwa6fZJK0igAsJ2y33jyEYXBgtAn5nyFrGQ20ZVPK_NvQPURLzzWRRT8s4RAMa85Oom/exec';
+                        const response = await fetch(scriptURL, {
+                            method: 'POST',
+                            redirect: 'follow',
+                            headers: {
+                                'Content-Type': 'text/plain',
+                            },
+                            body: JSON.stringify({ action: 'getAvailability' })
+                        });
+                        const result = await response.json();
+                        if (result.success) {
+                            availability = result.availability;
+                            // Cache de resultaten
+                            cachedAvailability = availability;
+                            cacheTimestamp = now;
+                        }
+                    } catch (error) {
+                        console.error('Could not fetch availability:', error);
+                    } finally {
+                        // Verberg loading animatie
+                        loadingOverlay.classList.remove('show');
                     }
-                } catch (error) {
-                    console.error('Could not fetch availability:', error);
                 }
             }
 
