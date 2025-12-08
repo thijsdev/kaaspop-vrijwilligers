@@ -335,7 +335,7 @@ function sendNotificationEmail(data) {
     subject: subject,
     htmlBody: htmlBody,
     name: CONFIG.emailVanNaam,
-    from: 'vrijwilligers@kaaspop.nl',
+    from: 'thijs@kaaspop.nl',
     replyTo: 'vrijwilligers@kaaspop.nl'
   });
 }
@@ -356,5 +356,25 @@ function testScript() {
   
   saveToSheet(testData);
   sendConfirmationEmail(testData);
+  sendNotificationEmail(testData);
   console.log('Test succesvol!');
+}
+
+// Test alleen notificatie email
+function testNotificationEmail() {
+  const testData = {
+    voornaam: 'Test',
+    achternaam: 'Notificatie',
+    email: 'test@example.com',
+    telefoon: '0612345678',
+    dieetwensen: ['Vegetarisch'],
+    vrijwilligerswerk: 'Kaasmarkt: 13:30-18:00',
+    samenMetBuddy: false,
+    buddyNaam: null,
+    opAfbouw: ['Vrijdag opbouw (met pizza) 18:00-22:00']
+  };
+  
+  console.log('Sending notification to:', CONFIG.organisatieEmail);
+  sendNotificationEmail(testData);
+  console.log('Notification sent!');
 }
