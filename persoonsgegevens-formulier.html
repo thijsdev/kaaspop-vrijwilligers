@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Persoonsgegevens - Kaaspop Stijl</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #FDB913;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            padding: 30px 25px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #1a1a1a;
+            margin-bottom: 10px;
+            text-align: center;
+            font-size: 32px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        label .required {
+            color: #FF6B35;
+            margin-left: 3px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"] {
+            width: 100%;
+            padding: 14px 16px;
+            border: 3px solid #1a1a1a;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus {
+            outline: none;
+            border-color: #FDB913;
+            box-shadow: 0 0 0 3px rgba(253, 185, 19, 0.2);
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: #f8f8f8;
+            padding: 15px;
+            border-radius: 8px;
+            border: 3px solid #1a1a1a;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+        }
+
+        input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            margin-right: 12px;
+            cursor: pointer;
+            accent-color: #FDB913;
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: 500;
+            text-transform: none;
+            letter-spacing: normal;
+            font-size: 15px;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: #f8f8f8;
+            padding: 15px;
+            border-radius: 8px;
+            border: 3px solid #1a1a1a;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+        }
+
+        input[type="radio"] {
+            width: 22px;
+            height: 22px;
+            margin-right: 12px;
+            cursor: pointer;
+            accent-color: #FDB913;
+        }
+
+        .radio-item label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: 500;
+            text-transform: none;
+            letter-spacing: normal;
+            font-size: 15px;
+        }
+
+        #anders-input {
+            display: none;
+            margin-top: 12px;
+            width: 100%;
+        }
+
+        #anders-input.show {
+            display: block;
+        }
+
+        select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 3px solid #1a1a1a;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s;
+            background: white;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%231a1a1a' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 20px;
+            padding-right: 45px;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #FDB913;
+            box-shadow: 0 0 0 3px rgba(253, 185, 19, 0.2);
+        }
+
+        select option {
+            padding: 10px;
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            background: #1a1a1a;
+            color: #FDB913;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        button:hover {
+            background: #FDB913;
+            color: #1a1a1a;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .error-message {
+            color: #FF6B35;
+            font-size: 13px;
+            margin-top: 6px;
+            display: none;
+            font-weight: 600;
+        }
+
+        /* Wizard styles */
+        .wizard-step {
+            display: none;
+        }
+
+        .wizard-step.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #e0e0e0;
+            z-index: 0;
+        }
+
+        .progress-bar-fill {
+            position: absolute;
+            top: 15px;
+            left: 0;
+            height: 3px;
+            background: #FDB913;
+            transition: width 0.3s ease;
+            z-index: 1;
+        }
+
+        .progress-step {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            color: #999;
+            position: relative;
+            z-index: 2;
+        }
+
+        .progress-step.active {
+            border-color: #FDB913;
+            color: #FDB913;
+            background: white;
+        }
+
+        .progress-step.completed {
+            border-color: #FDB913;
+            background: #FDB913;
+            color: white;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #1a1a1a;
+            border: 3px solid #1a1a1a;
+        }
+
+        .btn-secondary:hover {
+            background: #f0f0f0;
+            color: #1a1a1a;
+        }
+
+        .location-card {
+            background: #f8f8f8;
+            border: 3px solid #1a1a1a;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .location-card:hover {
+            background: #FDB913;
+            transform: translateX(5px);
+        }
+
+        .location-card.selected {
+            background: #FDB913;
+            border-color: #1a1a1a;
+        }
+
+        .location-card h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .location-card p {
+            font-size: 13px;
+            color: #666;
+            margin: 0;
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+                align-items: flex-start;
+            }
+
+            .container {
+                padding: 25px 20px;
+                margin: 20px 0;
+            }
+
+            h1 {
+                font-size: 26px;
+                margin-bottom: 8px;
+            }
+
+            .subtitle {
+                font-size: 13px;
+                margin-bottom: 25px;
+            }
+
+            label {
+                font-size: 13px;
+            }
+
+            input[type="text"],
+            input[type="email"],
+            input[type="tel"],
+            select {
+                padding: 12px 14px;
+                font-size: 16px;
+            }
+
+            select {
+                padding-right: 40px;
+            }
+
+            .checkbox-group {
+                padding: 12px;
+            }
+
+            .checkbox-item label {
+                font-size: 14px;
+            }
+
+            button {
+                padding: 14px;
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px 15px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            input[type="checkbox"],
+            input[type="radio"] {
+                width: 20px;
+                height: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Persoonsgegevens</h1>
+        <p class="subtitle">Vul alle velden in om je aan te melden</p>
+        
+        <div class="progress-bar">
+            <div class="progress-bar-fill" id="progressFill"></div>
+            <div class="progress-step active" id="step1-indicator">1</div>
+            <div class="progress-step" id="step2-indicator">2</div>
+            <div class="progress-step" id="step3-indicator">3</div>
+            <div class="progress-step" id="step4-indicator">4</div>
+        </div>
+
+        <form id="persoonsgegevensForm" novalidate>
+            <!-- Step 1: Persoonsgegevens -->
+            <div class="wizard-step active" id="step1">
+                <div class="form-group">
+                    <label for="voornaam">Voornaam<span class="required">*</span></label>
+                    <input type="text" id="voornaam" name="voornaam" required>
+                    <div class="error-message" id="voornaam-error">Voornaam is verplicht</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="achternaam">Achternaam<span class="required">*</span></label>
+                    <input type="text" id="achternaam" name="achternaam" required>
+                    <div class="error-message" id="achternaam-error">Achternaam is verplicht</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">E-mailadres<span class="required">*</span></label>
+                    <input type="email" id="email" name="email" required>
+                    <div class="error-message" id="email-error">Geldig e-mailadres is verplicht</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="telefoon">Telefoonnummer<span class="required">*</span></label>
+                    <input type="tel" id="telefoon" name="telefoon" required>
+                    <div class="error-message" id="telefoon-error">Telefoonnummer is verplicht</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Dieetwensen<span class="required">*</span></label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="geen-wensen" name="dieet" value="geen">
+                            <label for="geen-wensen">Geen wensen</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="vegetarisch" name="dieet" value="vegetarisch">
+                            <label for="vegetarisch">Vegetarisch</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="glutenvrij" name="dieet" value="glutenvrij">
+                            <label for="glutenvrij">Glutenvrij</label>
+                        </div>
+                    </div>
+                    <div class="error-message" id="dieet-error">Selecteer minimaal één dieetwens</div>
+                </div>
+
+                <button type="button" class="btn-next">Volgende</button>
+            </div>
+
+            <!-- Step 2: Tijdens Kaaspop wil ik helpen -->
+            <div class="wizard-step" id="step2">
+                <div class="form-group">
+                    <label>Tijdens Kaaspop wil ik helpen<span class="required">*</span></label>
+                    
+                    <div class="location-card" data-location="bar">
+                        <h3>🍺 Achter de bar</h3>
+                        <p>Help met het tappen en serveren van drankjes</p>
+                    </div>
+
+                    <div class="location-card" data-location="kinderhoek">
+                        <h3>🎨 In de kinderhoek</h3>
+                        <p>Begeleid kinderen met leuke activiteiten</p>
+                    </div>
+
+                    <div class="location-card" data-location="kassa">
+                        <h3>💰 Bij de muntenkassa</h3>
+                        <p>Verkoop munten en help bezoekers</p>
+                    </div>
+
+                    <div class="location-card" data-location="anders">
+                        <h3>✨ Met iets anders</h3>
+                        <p>Geef zelf aan waarmee je wilt helpen</p>
+                    </div>
+
+                    <input type="hidden" id="selected-location" name="location">
+                    <div class="error-message" id="location-error">Selecteer een locatie</div>
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="btn-prev btn-secondary">Vorige</button>
+                    <button type="button" class="btn-next">Volgende</button>
+                </div>
+            </div>
+
+            <!-- Step 3: Kies tijdslot -->
+            <div class="wizard-step" id="step3">
+                <div class="form-group">
+                    <label id="timeslot-label">Kies een tijdslot<span class="required">*</span></label>
+                    <div id="timeslot-options"></div>
+                    <input type="text" id="anders-input" name="anders-tekst" placeholder="Geef aan waarmee je wilt helpen" style="display:none; margin-top: 12px;">
+                    <div class="error-message" id="timeslot-error">Selecteer een tijdslot</div>
+                    <div class="error-message" id="anders-error">Vul in waarmee je wilt helpen</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Wil je met iemand samen de shift doen?</label>
+                    <p style="font-size: 13px; color: #666; margin-bottom: 12px; font-weight: normal; text-transform: none; letter-spacing: normal;">Let op: je buddy moet zich ook zelf aanmelden via dit formulier</p>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="buddy-nee" name="buddy" value="nee" checked>
+                            <label for="buddy-nee">Nee, ik doe het alleen</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="buddy-ja" name="buddy" value="ja">
+                            <label for="buddy-ja">Ja, met iemand anders</label>
+                        </div>
+                    </div>
+                    <input type="text" id="buddy-naam" name="buddy-naam" placeholder="Naam van je buddy" style="display:none; margin-top: 12px;">
+                    <div class="error-message" id="buddy-naam-error">Naam van je buddy is verplicht</div>
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="btn-prev btn-secondary">Vorige</button>
+                    <button type="button" class="btn-next">Volgende</button>
+                </div>
+            </div>
+
+            <!-- Step 4: Op- en afbouw -->
+            <div class="wizard-step" id="step4">
+                <div class="form-group">
+                    <label>Ik help mee met op- en afbouwen<span class="required">*</span></label>
+                    <p style="font-size: 13px; color: #666; margin-bottom: 12px; font-weight: normal; text-transform: none; letter-spacing: normal;">Meerdere opties mogelijk</p>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="opbouw-vrijdag" name="opafbouw" value="Vrijdag opbouw (met pizza) 18:00-22:00">
+                            <label for="opbouw-vrijdag">Vrijdag opbouw (met pizza) 18.00 - 22.00u</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="opbouw-zaterdag" name="opafbouw" value="Zaterdag opbouw (met lunch) 10:00-13:00">
+                            <label for="opbouw-zaterdag">Zaterdag opbouw (met lunch) 10.00 - 13.00u</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="afbouw-zondag" name="opafbouw" value="Zondag afbouw (met ontbijt) 10:00-14:00">
+                            <label for="afbouw-zondag">Zondag afbouw (met ontbijt) 10.00 - 14.00u</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="geen-opafbouw" name="opafbouw" value="Nee, dat lukt me niet">
+                            <label for="geen-opafbouw">Nee, dat lukt me niet</label>
+                        </div>
+                    </div>
+                    <div class="error-message" id="opafbouw-error">Selecteer minimaal één optie</div>
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="btn-prev btn-secondary">Vorige</button>
+                    <button type="submit">Verzenden</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const form = document.getElementById('persoonsgegevensForm');
+        const andersInput = document.getElementById('anders-input');
+        const buddyNaamInput = document.getElementById('buddy-naam');
+        const buddyJaRadio = document.getElementById('buddy-ja');
+        const buddyNeeRadio = document.getElementById('buddy-nee');
+        let currentStep = 1;
+        let selectedLocation = '';
+        let selectedTimeslot = '';
+
+        // Show/hide buddy name input
+        document.querySelectorAll('input[name="buddy"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (buddyJaRadio.checked) {
+                    buddyNaamInput.style.display = 'block';
+                    buddyNaamInput.focus();
+                } else {
+                    buddyNaamInput.style.display = 'none';
+                    buddyNaamInput.value = '';
+                }
+            });
+        });
+
+        // Handle "Nee, dat lukt me niet" checkbox
+        const geenOpafbouwCheckbox = document.getElementById('geen-opafbouw');
+        const opafbouwCheckboxes = document.querySelectorAll('input[name="opafbouw"]:not(#geen-opafbouw)');
+        
+        geenOpafbouwCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                opafbouwCheckboxes.forEach(cb => {
+                    cb.checked = false;
+                    cb.disabled = true;
+                });
+            } else {
+                opafbouwCheckboxes.forEach(cb => cb.disabled = false);
+            }
+        });
+
+        opafbouwCheckboxes.forEach(cb => {
+            cb.addEventListener('change', function() {
+                if (this.checked) {
+                    geenOpafbouwCheckbox.checked = false;
+                }
+            });
+        });
+
+        const timeslots = {
+            bar: [
+                { value: 'Achter de bar: 13:00-16:00', label: '13.00 - 16.00u' },
+                { value: 'Achter de bar: 16:00-19:00', label: '16.00 - 19.00u' },
+                { value: 'Achter de bar: 19:00-22:00', label: '19.00 - 22.00u' }
+            ],
+            kinderhoek: [
+                { value: 'In de kinderhoek: 13:00-17:00', label: '13.00 - 17.00u' }
+            ],
+            kassa: [
+                { value: 'Bij de muntenkassa: 13:00-16:00', label: '13.00 - 16.00u' },
+                { value: 'Bij de muntenkassa: 16:00-19:00', label: '16.00 - 19.00u' },
+                { value: 'Bij de muntenkassa: 19:00-22:00', label: '19.00 - 22.00u' }
+            ]
+        };
+
+        // Location card selection
+        document.querySelectorAll('.location-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.location-card').forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedLocation = this.dataset.location;
+                document.getElementById('selected-location').value = selectedLocation;
+            });
+        });
+
+        // Next button handlers
+        document.querySelectorAll('.btn-next').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (validateCurrentStep()) {
+                    currentStep++;
+                    showStep(currentStep);
+                    updateProgress();
+                    
+                    // Load timeslots for step 3
+                    if (currentStep === 3) {
+                        loadTimeslots();
+                    }
+                }
+            });
+        });
+
+        // Previous button handlers
+        document.querySelectorAll('.btn-prev').forEach(btn => {
+            btn.addEventListener('click', function() {
+                currentStep--;
+                showStep(currentStep);
+                updateProgress();
+            });
+        });
+
+        function showStep(step) {
+            document.querySelectorAll('.wizard-step').forEach(s => s.classList.remove('active'));
+            document.getElementById('step' + step).classList.add('active');
+            
+            // Update page title based on step
+            updateStepTitle(step);
+        }
+
+        function updateStepTitle(step) {
+            const titles = {
+                1: 'Persoonsgegevens',
+                2: 'Tijdens Kaaspop wil ik helpen',
+                3: selectedLocation === 'anders' ? 'Vertel ons meer' : 'Kies je tijdslot',
+                4: 'Op- en afbouw'
+            };
+            document.querySelector('h1').textContent = titles[step] || 'Persoonsgegevens';
+        }
+
+        function updateProgress() {
+            const progressFill = document.getElementById('progressFill');
+            const percentage = ((currentStep - 1) / 3) * 100;
+            progressFill.style.width = percentage + '%';
+
+            // Update step indicators
+            for (let i = 1; i <= 4; i++) {
+                const indicator = document.getElementById('step' + i + '-indicator');
+                if (i < currentStep) {
+                    indicator.classList.add('completed');
+                    indicator.classList.remove('active');
+                } else if (i === currentStep) {
+                    indicator.classList.add('active');
+                    indicator.classList.remove('completed');
+                } else {
+                    indicator.classList.remove('active', 'completed');
+                }
+            }
+        }
+
+        function loadTimeslots() {
+            const container = document.getElementById('timeslot-options');
+            const label = document.getElementById('timeslot-label');
+            container.innerHTML = '';
+
+            // Update the main title when loading timeslots
+            updateStepTitle(3);
+
+            if (selectedLocation === 'anders') {
+                label.style.display = 'none';
+                andersInput.style.display = 'block';
+                andersInput.focus();
+                return;
+            } else {
+                label.style.display = 'block';
+                label.innerHTML = 'Kies een tijdslot<span class="required">*</span>';
+                andersInput.style.display = 'none';
+            }
+
+            const slots = timeslots[selectedLocation] || [];
+            slots.forEach(slot => {
+                const card = document.createElement('div');
+                card.className = 'location-card';
+                card.dataset.timeslot = slot.value;
+                card.innerHTML = `<h3>🕐 ${slot.label}</h3>`;
+                card.addEventListener('click', function() {
+                    document.querySelectorAll('#timeslot-options .location-card').forEach(c => c.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedTimeslot = this.dataset.timeslot;
+                });
+                container.appendChild(card);
+            });
+        }
+
+        function validateCurrentStep() {
+            document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('input').forEach(el => el.style.borderColor = '#1a1a1a');
+
+            if (currentStep === 1) {
+                return validateStep1();
+            } else if (currentStep === 2) {
+                return validateStep2();
+            } else if (currentStep === 3) {
+                return validateStep3();
+            }
+            return true;
+        }
+
+        function validateStep1() {
+            let isValid = true;
+
+            const voornaam = document.getElementById('voornaam');
+            if (!voornaam.value.trim()) {
+                showError('voornaam');
+                isValid = false;
+            }
+
+            const achternaam = document.getElementById('achternaam');
+            if (!achternaam.value.trim()) {
+                showError('achternaam');
+                isValid = false;
+            }
+
+            const email = document.getElementById('email');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!email.value.trim() || !emailRegex.test(email.value)) {
+                showError('email');
+                isValid = false;
+            }
+
+            const telefoon = document.getElementById('telefoon');
+            const telefoonValue = telefoon.value.trim().replace(/\s|-/g, ''); // Remove spaces and dashes
+            if (!telefoonValue) {
+                showError('telefoon');
+                isValid = false;
+            } else if (telefoonValue.length < 10 || !/^\d+$/.test(telefoonValue)) {
+                document.getElementById('telefoon').style.borderColor = '#FF6B35';
+                document.getElementById('telefoon-error').textContent = 'Telefoonnummer moet minimaal 10 cijfers bevatten';
+                document.getElementById('telefoon-error').style.display = 'block';
+                isValid = false;
+            }
+
+            const dieetCheckboxes = document.querySelectorAll('input[name="dieet"]');
+            const isAnyDieetChecked = Array.from(dieetCheckboxes).some(cb => cb.checked);
+            if (!isAnyDieetChecked) {
+                document.getElementById('dieet-error').style.display = 'block';
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        function validateStep2() {
+            if (!selectedLocation) {
+                document.getElementById('location-error').style.display = 'block';
+                return false;
+            }
+            return true;
+        }
+
+        function validateStep3() {
+            let isValid = true;
+
+            // Validate tijdslot or "anders" input
+            if (selectedLocation === 'anders') {
+                if (!andersInput.value.trim()) {
+                    document.getElementById('anders-error').style.display = 'block';
+                    andersInput.style.borderColor = '#FF6B35';
+                    isValid = false;
+                }
+            } else {
+                if (!selectedTimeslot) {
+                    document.getElementById('timeslot-error').style.display = 'block';
+                    isValid = false;
+                }
+            }
+
+            // Validate buddy name if "Ja" is selected
+            const buddyRadio = document.querySelector('input[name="buddy"]:checked');
+            const buddyValue = buddyRadio ? buddyRadio.value : 'nee';
+            
+            if (buddyValue === 'ja' && !buddyNaamInput.value.trim()) {
+                buddyNaamInput.style.borderColor = '#FF6B35';
+                document.getElementById('buddy-naam-error').style.display = 'block';
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            let vrijwilligerswerkValue = '';
+            
+            // Reset error messages
+            document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('input').forEach(el => el.style.borderColor = '#1a1a1a');
+
+            if (selectedLocation === 'anders') {
+                if (!andersInput.value.trim()) {
+                    document.getElementById('anders-error').style.display = 'block';
+                    andersInput.style.borderColor = '#FF6B35';
+                    return;
+                }
+                vrijwilligerswerkValue = 'Anders: ' + andersInput.value.trim();
+            } else {
+                if (!selectedTimeslot) {
+                    document.getElementById('timeslot-error').style.display = 'block';
+                    return;
+                }
+                vrijwilligerswerkValue = selectedTimeslot;
+            }
+
+            // Validate buddy name if "Ja" is selected
+            const buddyRadio = document.querySelector('input[name="buddy"]:checked');
+            const buddyValue = buddyRadio ? buddyRadio.value : 'nee';
+            
+            if (buddyValue === 'ja' && !buddyNaamInput.value.trim()) {
+                buddyNaamInput.style.borderColor = '#FF6B35';
+                document.getElementById('buddy-naam-error').style.display = 'block';
+                return;
+            }
+
+            // Validate op/afbouw (at least one checkbox must be checked)
+            const opafbouwCheckboxes = document.querySelectorAll('input[name="opafbouw"]');
+            const isAnyOpafbouwChecked = Array.from(opafbouwCheckboxes).some(cb => cb.checked);
+            console.log('Opafbouw checkboxes:', opafbouwCheckboxes.length, 'Checked:', isAnyOpafbouwChecked);
+            if (!isAnyOpafbouwChecked) {
+                console.log('Showing opafbouw error');
+                document.getElementById('opafbouw-error').style.display = 'block';
+                return;
+            }
+
+            const dieetCheckboxes = document.querySelectorAll('input[name="dieet"]');
+            
+            const formData = {
+                voornaam: document.getElementById('voornaam').value.trim(),
+                achternaam: document.getElementById('achternaam').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                telefoon: document.getElementById('telefoon').value.trim(),
+                dieetwensen: Array.from(dieetCheckboxes)
+                    .filter(cb => cb.checked)
+                    .map(cb => cb.value),
+                vrijwilligerswerk: vrijwilligerswerkValue,
+                samenMetBuddy: buddyValue === 'ja',
+                buddyNaam: buddyValue === 'ja' ? buddyNaamInput.value.trim() : null,
+                opAfbouw: Array.from(opafbouwCheckboxes)
+                    .filter(cb => cb.checked)
+                    .map(cb => cb.value)
+            };
+
+            console.log('Formulier verzonden:', formData);
+            alert('Formulier succesvol verzonden!\n\nGegevens:\n' + JSON.stringify(formData, null, 2));
+            
+            form.reset();
+            currentStep = 1;
+            showStep(1);
+            updateProgress();
+            selectedLocation = '';
+            selectedTimeslot = '';
+        });
+
+        function showError(fieldId) {
+            document.getElementById(fieldId).style.borderColor = '#FF6B35';
+            document.getElementById(fieldId + '-error').style.display = 'block';
+        }
+
+        // Initialize
+        updateProgress();
+    </script>
+</body>
+</html>
