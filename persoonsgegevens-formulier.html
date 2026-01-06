@@ -804,9 +804,9 @@
                 andersInput.style.display = 'none';
             }
 
-            // Haal beschikbaarheid op voor bardiensten
+            // Haal beschikbaarheid op voor bardiensten en muntenkassa
             let availability = {};
-            if (selectedLocation === 'bar') {
+            if (selectedLocation === 'bar' || selectedLocation === 'kassa') {
                 // Check cache eerst
                 const now = Date.now();
                 if (cachedAvailability && cacheTimestamp && (now - cacheTimestamp < CACHE_DURATION)) {
@@ -852,7 +852,7 @@
                 let availabilityText = '';
                 let isDisabled = false;
                 
-                if (selectedLocation === 'bar' && availability[slot.value]) {
+                if ((selectedLocation === 'bar' || selectedLocation === 'kassa') && availability[slot.value]) {
                     const avail = availability[slot.value];
                     if (avail.remaining > 0) {
                         availabilityText = `<p style="color: #4ec9b0; font-weight: 600; margin-top: 5px;">Nog ${avail.remaining} ${avail.remaining === 1 ? 'plek' : 'plekken'} beschikbaar</p>`;
